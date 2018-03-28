@@ -46,6 +46,7 @@ fn extract_claims(subject_id: &String, claim_snaks: Values) -> Vec<Relation> {
                 .to_string();
             match datatype {
                 "monolingualtext" => {
+                    println!("{}", mainsnak["datavalue"]["value"]);
                     let value = mainsnak["datavalue"]["value"]["text"]
                         .as_str()
                         .expect("Expected text value to exist")
