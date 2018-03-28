@@ -52,7 +52,7 @@ fn extract_claims(subject_id: &String, claim_snaks: Values) -> Vec<Relation> {
                         .to_string();
                     Some(Relation {subject, property, value})
                 },
-                "wikibase-item" => {
+                "wikibase-item" | "wikibase-property" => {
                     match mainsnak["datavalue"]["value"]["id"].as_str() {
                         Some(str_value) => {
                             let value = str_value.to_string();
@@ -62,7 +62,7 @@ fn extract_claims(subject_id: &String, claim_snaks: Values) -> Vec<Relation> {
                     }
                 }
                 "external-id" | "url" | "globe-coordinate" | "quantity"
-                    | "string" | "commonsMedia" | "time" => None,
+                    | "string" | "commonsMedia" | "time" | "math" => None,
                 _ => {
                     println!("\n!!!!Skipping: {}", datatype);
                     println!("!!!!Claim: {}", mainsnak);
