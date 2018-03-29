@@ -22,7 +22,7 @@ wikidata dump is about 100GB it may be faster to split the large file into batch
 The command to run would change to something like this then:
 `cargo run --release -- $(find /scratch0/wikidata-parts/)`
 
-Lastly, if you want the output saved to a file the easiest way is to redirect the stdout to a file like `cargo run --release -- $(find /scratch0/wikidata-parts/) > relations.jsonl`
+Lastly, if you want the output saved to a file the easiest way is to redirect the stdout to a file like `cargo run --release -- $(find /scratch0/wikidata-parts/ -type f) > relations.jsonl`
 
 ## Installation
 
