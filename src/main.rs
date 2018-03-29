@@ -6,15 +6,14 @@ extern crate rayon;
 #[macro_use]
 extern crate serde_derive;
 
-use std::fmt::format;
 use std::fs::File;
 use std::io::{BufReader, BufRead};
 use std::vec::Vec;
 use std::iter::Iterator;
 use std::path::Path;
 use std::io::prelude::*;
-use clap::{Arg, App};
 use rayon::prelude::*;
+use clap::{Arg, App};
 
 
 use serde_json::Value;
@@ -98,14 +97,16 @@ fn line_to_relations(line: &str) -> Vec<Relation> {
     }
 }
 
-fn filename_to_relations(filename: &str) -> Vec<Relation> {
+fn filename_to_relation_out(filename: &str) -> () {
     let file = File::open(filename).expect("file not found");
     BufReader::new(file).lines().flat_map(|l| {
         match l {
             Ok(l) => line_to_relations(&l),
             Err(_) => Vec::new()
         }
-    }).collect()
+    }).map(|r| serde_json::to_string(&r).unwrap()).for_each(|r| {
+        println!("{}", r);
+    });
 }
 
 
@@ -119,13 +120,9 @@ fn main() {
                               .help("Location of wikidata json dump")
                               .required(true)
                               .index(1)
-                              .multiple(true))
+                              .multiple(true)
+                              )
                           .get_matches();
-    let input_files: Vec<&str> = matches.values_of("INPUT").unwrap().collect();
-    input_files
-        .par_iter()
-        .flat_map(|f| filename_to_relations(f))
-        .for_each(|r| {
-            println!("{}", serde_json::to_string(&r).unwrap());
-        })
+    let input_filenames: Vec<_> = matches.values_of("INPUT").unwrap().collect();
+    input_filenames.par_iter().map(|f| filename_to_relation_out(f)).count();
 }
