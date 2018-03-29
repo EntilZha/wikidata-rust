@@ -10,8 +10,6 @@ use std::fs::File;
 use std::io::{BufReader, BufRead};
 use std::vec::Vec;
 use std::iter::Iterator;
-use std::path::Path;
-use std::io::prelude::*;
 use rayon::prelude::*;
 use clap::{Arg, App};
 
