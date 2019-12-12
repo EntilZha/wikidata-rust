@@ -39,13 +39,15 @@ fn parse_value(datatype: &str, mainsnak: &Value) -> Option<String> {
         "monolingualtext" => {
             mainsnak["datavalue"]["value"]["text"].as_str().map(|s| s.to_string())
         },
-        "wikibase-item" | "wikibase-property" => {
+        "wikibase-item" | "wikibase-property" | "wikibase-lexeme" | "wikibase-form"
+            | "wikibase-sense" => {
             mainsnak["datavalue"]["value"]["id"].as_str().map(|s| s.to_string())
         }
         "external-id" | "url" | "globe-coordinate" | "quantity"
-            | "string" | "commonsMedia" | "time" | "math" => None,
+            | "string" | "commonsMedia" | "time" | "math" | "geo-shape"
+            | "musical-notation" | "tabular-data" => None,
         _ => {
-            panic!("Oops, unhandled data type")
+            panic!("Oops, unhandled data type {}", datatype)
         }
     }
 }
